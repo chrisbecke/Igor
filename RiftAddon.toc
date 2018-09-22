@@ -1,0 +1,27 @@
+Identifier = "Example"
+
+NameShort = "Igor" 
+
+Name = "Igor"
+ 
+Description = "Igor is ready to serve.\n\nAsk Igor anything using the following command:\n\t/igor"
+ 
+Author = "GreenZombie"
+ 
+Version = "1.0"
+ 
+Email = "chris.becke@gmail.com"
+ 
+Environment = "4.0"
+ 
+RunOnStartup = {
+    "Core.lua",
+    "DebugHelpers.lua",
+
+    "Igor.lua",
+    "Dragger.lua",
+    "Dump.lua",
+    "UI.Help.lua",
+
+    "Mountaneer.lua"
+}
