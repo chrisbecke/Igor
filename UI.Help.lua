@@ -8,7 +8,7 @@ help.window:SetVisible(false)
 Igor.UI.EnableDrag(help.window)
 
 -- Add our command to Igor.
-Igor.Command['help'] = function()
+Igor.Command['showhelp'] = function()
     help.window:SetVisible(not help.window:GetVisible())
 end
 

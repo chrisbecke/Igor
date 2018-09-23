@@ -22,3 +22,17 @@ function string:split(delimiter)
     table.insert( result, string.sub( self, from  ) )
     return result
 end
+
+-- returns a dense array table containing the keys
+-- passing it an array table produces an undefined result
+function table.keys(self)
+    local keys = {}
+    for key in pairs(self) do
+        keys[#keys+1]=key
+    end
+    return keys
+end
+
+function table.casesort(self)
+    table.sort(self,function(a,b) return string.lower(a) < string.lower(b) end)
+end

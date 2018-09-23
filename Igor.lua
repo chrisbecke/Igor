@@ -28,9 +28,13 @@ local function IgorChatCommand(handle, parameter)
     end
 end
 
--- register some defualt debug related commands
--- Igor.Command['info'] = printInfo
--- Igor.Command['c'] = function() printElements(Igor.help.context) end
+Igor.Command['help'] = function()
+    print("Usage: /igor <command>")
+    print("where command is one of:")
+    local commands = table.keys(Igor.Command)
+    table.sort(commands)
+    print('',table.concat(commands,', '))
+end
 
 Command.Event.Attach(Command.Slash.Register("igor"),IgorChatCommand,"Igor Slash Command")
 
