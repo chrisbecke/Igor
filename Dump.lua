@@ -42,13 +42,22 @@ local function print_tableMembersByType(obj,prefix,showMarkdown,showTypes,recurs
         list=items[type]
         if showMarkdown then print("## " .. type) end
         local suffix=""
-        if showTypes then suffix = ' (' .. type .. ')' end
+        --if showTypes then suffix = ' (' .. type .. ')' end
         local list=items[type]
         table.sort(list)
         for i=1, #list do
+            if showTypes then
+                if type == 'nil' then suffix = " = nil"
+                elseif type == 'table' then suffix = " = { }"
+                elseif type == 'string' then suffix = " = '".. obj[list[i]].."'"
+                elseif type == 'number' then suffix = " = " .. tostring(obj[list[i]])
+                elseif type == 'function' then suffix = " = function()"
+                else suffix = " = " .. tostring(obj[list[i]] .. " ("..type..")")
+                end
+            end
             print(prefix .. list[i] .. suffix .. exSuffix)
             if recurse and type=='table' then
-                print_tableMembersByType(obj[list[i]],prefix .. list[i] ..'.',false,showtypes,recurse,exSuffix)
+                print_tableMembersByType(obj[list[i]],prefix .. list[i] ..'.',false,showTypes,recurse,exSuffix)
             end
         end
     end 
@@ -114,6 +123,7 @@ local function dumpcommand(param)
     local usePrefix = false
     local showTypes = false
     local walkMeta = false
+    local showValues = false
     for i=1, #args-1 do
         local arg = args[i]
         if arg == 'md' then
@@ -122,7 +132,7 @@ local function dumpcommand(param)
             recurse=true
         elseif arg == string.sub('path',1,#arg) then
             usePrefix=true
-        elseif arg == string.sub('type',1,#arg) then
+        elseif arg == string.sub('types',1,#arg) or arg == string.sub('values',1,#arg) then
             showTypes=true
         elseif arg == string.sub('meta',1,#arg) then
             walkMeta=true
