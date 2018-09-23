@@ -9,7 +9,7 @@ Igor.Command['mount'] = function()
     end
 
     -- choose a mount. And mount it.
-    if #mountIds then
+    if #mountIds ~= 0 then
         local chosenMountId = mountIds[math.random(#mountIds)];
         Command.Item.Mount.Use(chosenMountId)
     else

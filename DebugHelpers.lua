@@ -7,7 +7,8 @@ local function table_keys(tableIn)
     return keys
 end
 
-local function print_tableMembersByType(obj,prefix,showMarkdown,showTypes)
+local function print_tableMembersByType(obj,prefix,showMarkdown,showTypes,recurse,exSuffix)
+    if not exSuffix then exSuffix="" end
     if not prefix then prefix="" end
     local items = {}
     for key, value in pairs(obj) do
@@ -25,7 +26,10 @@ local function print_tableMembersByType(obj,prefix,showMarkdown,showTypes)
         local list=items[type]
         table.sort(list)
         for i=1, #list do
-            print(prefix .. list[i] .. suffix)
+            print(prefix .. list[i] .. suffix .. exSuffix)
+            if recurse and type=='table' then
+                print_tableMembersByType(obj[list[i]],prefix .. list[i] ..'.',false,showtypes,recurse,exSuffix)
+            end
         end
     end 
 end
@@ -131,13 +135,14 @@ Command.Event.Attach(
             print("Showing members of " .. name .. " ...")
             if showMarkdown then print("# " .. param) end
             if usePrefix then param = param .. '.' else param = '' end
-            print_tableMembersByType(obj,param,showMarkdown,showTypes)
+            print_tableMembersByType(obj,param,showMarkdown,showTypes,recurse)
             if walkMeta then
-                print('scanning meta...')
-                local meta=obj.__index
+                local meta=getmetatable(obj)
+                if meta then meta = meta.__index end
                 while meta do
-                    print_tableMembersByType(obj,param.."meta",showMarkdown,showTypes)
-                    meta=meta.__index
+                    print_tableMembersByType(obj,param,showMarkdown,showTypes,recurse," (inherited)")
+                    meta=getmetatable(meta)
+                    if meta then meta = meta.__index end
                 end
             end
         end
