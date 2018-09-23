@@ -11,7 +11,14 @@ Igor = {
 local function IgorChatCommand(handle, parameter)
 
     -- redirect any empty commands to help
-    if string.isempty(parameter) then parameter = 'help' end
+    if string.isempty(parameter) or parameter == '-help' then
+        print("Usage: /igor <command>")
+        print("where command is one of:")
+        local commands = table.keys(Igor.Command)
+        table.sort(commands)
+        print('',table.concat(commands,', '))
+        return
+    end
 
     -- split the slashcommand parameter into a command and arguments pair
     local command, arguments = parameter:match('(%w+) (.*)')
@@ -26,14 +33,6 @@ local function IgorChatCommand(handle, parameter)
     else
         print("Igor doesn't know what '" .. parameter .. "' means.")
     end
-end
-
-Igor.Command['help'] = function()
-    print("Usage: /igor <command>")
-    print("where command is one of:")
-    local commands = table.keys(Igor.Command)
-    table.sort(commands)
-    print('',table.concat(commands,', '))
 end
 
 Command.Event.Attach(Command.Slash.Register("igor"),IgorChatCommand,"Igor Slash Command")
