@@ -16,12 +16,13 @@ Environment = "4.0"
  
 RunOnStartup = {
     "Core.lua",
-    "DebugHelpers.lua",
 
     "Igor.lua",
     "Dragger.lua",
     "Dump.lua",
     "UI.Help.lua",
+
+    "Test.lua",
 
     "Mountaneer.lua"
 }
