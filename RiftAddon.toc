@@ -4,7 +4,19 @@ NameShort = "Igor"
 
 Name = "Igor"
  
-Description = "Igor is ready to serve.\n\nAsk Igor anything using the following command:\n\t/igor"
+Description = { 
+    English = [[Igor is ready to serve.
+Ask Igor anything using the following command:
+
+    /igor
+
+## Commands:
+igor -help - shows help text
+igor mount - igor chooses a random mount for you
+igor dump - igor dumps items from the lua globals space
+igor doc - igor shows RIFT Addon API documentation for items
+]]
+}
  
 Author = "GreenZombie"
  
@@ -19,8 +31,10 @@ RunOnStartup = {
 
     "Igor.lua",
     "Dragger.lua",
+    "Task.lua",
     "Dump.lua",
     "UI.Help.lua",
+    "dump_md.lua",
 
     "Test.lua",
 

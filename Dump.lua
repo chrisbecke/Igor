@@ -165,6 +165,7 @@ local function dumpcommand(param)
     end
 end
 
+
 Igor.Command['dump'] = function(param)
     if string.isempty(param) or param=='-help' then
         print("Dump prints info about objects in the lua namespace")
