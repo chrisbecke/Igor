@@ -20,7 +20,7 @@ Igor is an Addon for RIFT
     /igor dumpall md
     prints the entire doc set to the console using #markdown.
     
-# Using dumpall
+## Using dumpall
 Dumpall is intended to be used to create your own copy of the full RIFT API documentation for any version of RIFT.
 
 From within rift execute the following commands, waiting for igor to finish writing out before the final `/log`.
@@ -32,7 +32,7 @@ From within rift execute the following commands, waiting for igor to finish writ
 Your ~/Documents/RIFT folder should now contain a log.txt with minimal processing can be saved as a valid markdown file.
 It is very long - cutting it up into section or function sized chunks is an exercise left to the reader :)
     
-# Using list and doc
+## Using list and doc
 List and doc are a way, in RIFT, to search the available documentation, and show a doc for a specific documentation entry.
 
     /igor list .
@@ -45,7 +45,7 @@ doc just shows the documentable.readable entry for a specific item and the name 
 
     /igor doc UI.Context
 
-# Using dump
+## Using dump
 I expect to change this function a lot.
 
 The purpose of dump is to dump to console the entries of a named Lua global variable.
@@ -54,7 +54,7 @@ It is very similar to the provided `dump` function, so the following two command
     /script dump(UI.Context)
     /igor dump v r p UI.Context
 
-# Built in stuff
+## Built in stuff
 RIFT actually has some interesting lua related debugging features built in.
 
 Slash command script can be passed a lua expression that it will run. If you want to see output you need to use print().
