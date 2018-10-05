@@ -44,3 +44,23 @@ You can get a filtered list by passing a lua pattern. lua string patterns are si
 doc just shows the documentable.readable entry for a specific item and the name simply has to match and is case senstive.
 
     /igor doc UI.Context
+
+# Using dump
+I expect to change this function a lot.
+
+The purpose of dump is to dump to console the entries of a named Lua global variable.
+It is very similar to the provided `dump` function, so the following two commands are largely similar
+
+    /script dump(UI.Context)
+    /igor dump v r p UI.Context
+
+# Built in stuff
+RIFT actually has some interesting lua related debugging features built in.
+
+Slash command script can be passed a lua expression that it will run. If you want to see output you need to use print().
+
+    /script print(1+2)
+
+Global function dump() is also added. Pass it an list of in scope objects (probably global) and it will emit them to the console. Being a lua function it can be paired with `/script` to be useful from the console window
+
+    /script dump(UI.Context,UI.CreateFrame)
