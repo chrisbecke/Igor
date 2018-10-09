@@ -165,15 +165,14 @@ local function dumpcommand(param)
     end
 end
 
-
 Igor.Command['dump'] = function(param)
     if string.isempty(param) or param=='-help' then
         print("Dump prints info about objects in the lua namespace")
-        print("Usage: /igor dump [md] [path] [type] <name>")
+        print("Usage: /igor dump [path] [type] <name>")
         print('where <name> is the name of the object to dump or "." for _G')
         print("Example: /igor dump p t UI.Context\t\t\tShows path and type info for UI.Context")
     else
-        dumpcommand(param)
+        Task.Run(dumpcommand(param))
     end
 end
 
@@ -188,7 +187,7 @@ Igor.Command['list'] = function( param )
         else
             print('Listing Documentation artifacts that match ' .. param ..':')
         end
-        printAllDocuments(param)
+        Task.Run(printAllDocuments(param))
     end
 end
     
@@ -199,6 +198,6 @@ Igor.Command['doc'] = function( param )
         print('where <name> is an Inspector.Documentation item e.g. from /igor list')
     else
         print('Showing Documentation for ' .. param)
-        printDocument(param)
+        Task.Run(printDocument(param))
     end
 end

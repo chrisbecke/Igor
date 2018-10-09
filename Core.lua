@@ -33,6 +33,7 @@ function table.keys(self)
     return keys
 end
 
+-- sorts a table, but case insensitive.
 function table.casesort(self)
     table.sort(self,function(a,b) return string.lower(a) < string.lower(b) end)
 end

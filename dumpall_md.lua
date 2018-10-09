@@ -13,7 +13,7 @@ local function dump_md()
 
     -- fix some characters in strings that cause md parsing to screw up
     local function safe(val)
-        return val:gsub('<','&lt;')
+        return val:gsub('([<*])',{['<']='&lt;',['*']='\\*'})
     end
 
     local function print_table(tbl,prefix,recurse)
@@ -90,7 +90,8 @@ local function dump_md()
 
             print('#### Restrictions:')
             if doc.hardwareevent then
-                print('This function consumes a hardware event to function. Hardware events include Event.UI.Input.Mouse.*.Down, Event.UI.Input.Mouse.*.Up, and Event.UI.Input.Mouse.Wheel.*.  ')
+                print('This function consumes a hardware event to function. Hardware events include Event.UI.Input.Mouse.\\*.Down, Event.UI.Input.Mouse.\\*.Up, and Event.UI.Input.Mouse.Wheel.\\*.  ')
+                doc.hardwareevent=nil
             end
             if doc.throttleGlobal then
                 print('This function is subject to the "global" command queue.  ')
@@ -112,7 +113,11 @@ local function dump_md()
                 doc.requireSecureFrameAndInsecureEnvironment = nil
             end
             if doc.interaction then
-                print('Permitted only with the \''..doc.interaction..'\' interaction active.  ')
+                if doc.interaction == 'item' then
+                    print('If interacting with an item in the player bank, requiers the "bank" interaction flag to be set. If interacting with an item in the guild bank, required the "guildbank" interaction flag to be set.  ')
+                else
+                    print('Requires the "'..doc.interaction..'" flag to be set.  ')
+                end
                 doc.interaction = nil
             end
         end

@@ -2,8 +2,14 @@ Igor = {
     -- UI Widgets register here 
     UI = { },
     -- Command handlers register here
-    Command = {}
+    Command = {},
+
+    Persist = { LoadCount = 0 }
 }
+
+Igor_Persist = Igor.Persist
+
+Igor.Persist.Saved = Igor.Persist.LoadCount + 1
 
 
 -- All /igor commands are of the form

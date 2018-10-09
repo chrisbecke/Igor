@@ -27,6 +27,7 @@ Email = "chris.becke@gmail.com"
 Environment = "4.0"
  
 RunOnStartup = {
+    "debug.lua",
     "Core.lua",
 
     "Igor.lua",
@@ -34,9 +35,16 @@ RunOnStartup = {
     "Task.lua",
     "Dump.lua",
     "UI.Help.lua",
-    "dump_md.lua",
+    "dumpall_md.lua",
 
     "Test.lua",
+--    "TextureDump.lua",
 
-    "Mountaneer.lua"
+    "Mountaneer.lua",
+    "Minion.lua"
+}
+
+SavedVariables = {
+--    Igor_Textures = "global"
+    Igor_Persist = "global" 
 }
