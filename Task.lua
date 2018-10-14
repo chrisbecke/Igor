@@ -1,29 +1,27 @@
 Task = { }
 
-local hookEnabled = false
-
 local running = {}
 local canYield = false
 
+local function TaskDispatcher(handle)
+    canYield=true
+    for task in pairs(running) do
+        if not coroutine.resume(task) then 
+            running[task] = nil
+            if table.isempty(running) then
+                Command.Event.Detatch(Event.System.Update.Begin, TaskDispatcher)
+            end
+        end
+    end
+    canYield=false
+end
+
 -- This does the work of starting the coroutine and attaching our frame event.
 function Task.Run(action)
-
-    running[coroutine.create(action)] = true
-      
-    if not hookEnabled then
-        hookEnabled = true
-        Command.Event.Attach(
-            Event.System.Update.Begin, 
-            function (handle)
-                canYield=true
-                for task in pairs(running) do
-                    if not coroutine.resume(task) then 
-                        running[task] = nil 
-                    end
-                end
-                canYield=false
-            end, "Display")
+    if table.isempty(running) then
+        Command.Event.Attach(Event.System.Update.Begin, TaskDispatcher, "TaskDispatcher")
     end
+    running[coroutine.create(action)] = true
 end
 
 -- it should be safe to call Task.Yield from non task functions

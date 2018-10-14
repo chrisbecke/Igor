@@ -32,4 +32,36 @@ function dvalue(value,name)
     end
 end
 
+-- deeply walks a table printing out all discoverable things including metatables
+function fulldump(obj,prefix)
 
+    local function dstring(value)
+        if type(value) == 'table' then
+            return '{} -- '..Utility.Type(value)
+        elseif type(value) == 'string' then 
+            return "'"..value.."''"
+        end
+        return tostring(value)
+    end
+
+    local function dumpTableRecursive(obj,prefix)
+        for key,value in pairs(obj) do
+            print(prefix..key..'='..dstring(value))
+            if type(value) == 'table' then dumpTableRecursive(value,prefix..key..'.') end
+        end
+        local meta = getmetatable(obj)
+        if meta then
+            print(prefix..'!meta! = '..dstring(meta))
+            dumpTableRecursive(meta,prefix..'!meta!.')
+        end
+    end
+
+    if not prefix then prefix = '' else prefix = prefix..'.' end
+
+    if type(obj) == 'table' then
+        print('Walking all data for '..dstring(obj))
+        dumpTableRecursive(obj,prefix)
+    else
+        print(prefix..' = '..dstring(obj))
+    end
+end

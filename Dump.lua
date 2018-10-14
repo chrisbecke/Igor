@@ -1,4 +1,5 @@
 
+
 local function printAllDocuments(pattern)
     local documentables = Inspect.Documentation()
     if string.isempty(pattern) then pattern=".*" end
@@ -42,17 +43,15 @@ local function print_tableMembersByType(obj,prefix,showMarkdown,showTypes,recurs
         list=items[type]
         if showMarkdown then print("## " .. type) end
         local suffix=""
-        --if showTypes then suffix = ' (' .. type .. ')' end
         local list=items[type]
         table.sort(list)
         for i=1, #list do
             if showTypes then
-                if type == 'nil' then suffix = " = nil"
-                elseif type == 'table' then suffix = " = { }"
-                elseif type == 'string' then suffix = " = '".. obj[list[i]].."'"
-                elseif type == 'number' then suffix = " = " .. tostring(obj[list[i]])
-                elseif type == 'function' then suffix = " = function()"
-                else suffix = " = " .. tostring(obj[list[i]] .. " ("..type..")")
+                if type == 'table' then suffix = " = { }"
+                elseif type == 'string' then suffix = " = '"..obj[list[i]].."'"
+                elseif type == 'number' then suffix = " = " ..tostring(obj[list[i]])
+                elseif type == 'function' then suffix = ' = function()'
+                else suffix = " = "..tostring(obj[list[i]])
                 end
             end
             print(prefix .. list[i] .. suffix .. exSuffix)
@@ -172,7 +171,7 @@ Igor.Command['dump'] = function(param)
         print('where <name> is the name of the object to dump or "." for _G')
         print("Example: /igor dump p t UI.Context\t\t\tShows path and type info for UI.Context")
     else
-        Task.Run(dumpcommand(param))
+        dumpcommand(param)
     end
 end
 

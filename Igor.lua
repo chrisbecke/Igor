@@ -1,15 +1,21 @@
+Igor_Persist = {}
+
 Igor = {
     -- UI Widgets register here 
-    UI = { },
+    UI = { Factory = {} },
     -- Command handlers register here
     Command = {},
 
-    Persist = { LoadCount = 0 }
+    Persist = Igor_Persist
 }
 
 Igor_Persist = Igor.Persist
 
-Igor.Persist.Saved = Igor.Persist.LoadCount + 1
+if not Igor.Persist.LoadCount then 
+    Igor.Persist.LoadCount = 1 
+else
+    Igor.Persist.LoadCount = Igor.Persist.LoadCount + 1
+end
 
 
 -- All /igor commands are of the form
@@ -39,6 +45,11 @@ local function IgorChatCommand(handle, parameter)
     else
         print("Igor doesn't know what '" .. parameter .. "' means.")
     end
+end
+
+
+function Igor.UI.CreateFrame(type,name,parent)
+    return Igor.UI.Factory[type](name,parent)
 end
 
 Command.Event.Attach(Command.Slash.Register("igor"),IgorChatCommand,"Igor Slash Command")

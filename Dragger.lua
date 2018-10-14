@@ -1,4 +1,5 @@
 -- must pass in a RiftWindow
+--[[
 function Igor.UI.EnableDrag(window)
     local border = window:GetBorder()
     local isLeftDown = false
@@ -27,3 +28,4 @@ function Igor.UI.EnableDrag(window)
         window:SetPoint("TOPLEFT", UIParent, "TOPLEFT", x - drag.x, y - drag.y)
     end
   end
+  ]]

@@ -1,5 +1,4 @@
--- Add our command to Igor.
-Igor.Command['mount'] = function()
+local function ChooseRandomMount()
     local mounts = Inspect.Item.Mount.List()
 
     -- turn the mount ids {id,true} into a proper array
@@ -16,3 +15,20 @@ Igor.Command['mount'] = function()
         print("Igor cannot find any mounts!")
     end
 end
+
+
+
+local context = UI.CreateContext("Console")
+local button = Igor.UI.CreateFrame("Button","Minion",context)
+
+button:EnableDrag()
+button:SetPoint("CENTER",UIParent,"CENTER")
+button:EventAttach(Event.UI.Input.Mouse.Left.Click,
+function()
+    ChooseRandomMount()
+end,
+"Mount".."Click")
+
+
+-- Add our command to Igor.
+Igor.Command['mount'] = ChooseRandomMount

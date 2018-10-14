@@ -37,3 +37,7 @@ end
 function table.casesort(self)
     table.sort(self,function(a,b) return string.lower(a) < string.lower(b) end)
 end
+
+function table.isempty(self)
+    return next(self)
+end

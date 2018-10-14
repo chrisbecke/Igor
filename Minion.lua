@@ -14,6 +14,7 @@
 
 local Minion = {}
 
+
 -- 'available'
 -- 'working'
 local function countOfAdventuresInMode(mode, adventures)
@@ -70,7 +71,8 @@ local function InitAdventures()
     print("Active Slots: "..tostring(#finished+#working).."/"..slots)
 end
 
-
+-- Textures
+-- minion_adventures_xxx(x,y).png.dds
 
 local function OnAdventureChange(handle, adventures)
     for key in pairs(adventures) do
