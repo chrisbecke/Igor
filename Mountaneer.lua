@@ -1,8 +1,8 @@
-Igor.Persist.Minion = {
-    Points = {}
-}
+Igor.Persist.Minion = { }
 
 Igor_Persist.Minion = {
+    Position = {
+    }
 }
 
 local function ChooseRandomMount()
@@ -30,16 +30,29 @@ local button = Igor.UI.CreateFrame("Button","Minion",context)
 
 button:EnableDrag(
     function()
-        local points = button:ReadAll()
-        fulldump(points,"points")
-        Igor_Persist.Minion.Points = points
+        local left, top, right, bottom = button:GetBounds()
+        Igor_Persist.Minion.Points = nil
+        Igor_Persist.Minion.Position = {
+            x = (right+left)/2,
+            y = (bottom+top)/2
+        }
     end)
 button:SetPoint("CENTER",UIParent,"CENTER")
-button:EventAttach(Event.UI.Input.Mouse.Left.Click,
+button:EventAttach(Event.UI.Button.Left.Press,
 function()
+    print('press')
     ChooseRandomMount()
 end,
-"Mount".."Click")
+"Mount".."press")
+
+
+Command.Event.Attach(Event.Addon.SavedVariables.Load.End,function()
+    if Igor_Persist.Minion.Position.x and Igor_Persist.Minion.Position.y then
+        button:SetPoint("CENTER",UIParent,"TOPLEFT",Igor_Persist.Minion.Position.x,Igor_Persist.Minion.Position.y)
+    end
+end,
+"MountaneerVariablesDidLoad")
+
 
 -- Add our command to Igor.
 Igor.Command['mount'] = ChooseRandomMount

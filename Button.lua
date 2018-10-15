@@ -4,51 +4,60 @@ Igor.UI.Factory['Button'] = function(name,context)
     local button = UI.CreateFrame("RiftButton",name,context)
 
     function button:EnableDrag(onmoved)
-        local isDragging = false
-        local drag = { x=0, y=0 }
+        local dragging = nil
+        local wasEnabled = nil
 
-        self:EventAttach(Event.UI.Input.Mouse.Left.Down,
-        function() 
-            isDragging = true
+        local function startDrag()
             local mouse = Inspect.Mouse()
-            local x = self:GetLeft() + self:GetWidth()/2
-            local y = self:GetTop() + self:GetHeight()/2
-            drag.x = mouse.x - x
-            drag.y = mouse.y - y
-            self:ClearAll()
-            self:SetPoint("CENTER", UIParent, "TOPLEFT", x, y)
-        end,
-        name.."LeftDown")
+            dragging = { x=mouse.x, y=mouse.y }
+        end
 
-        self:EventAttach(Event.UI.Input.Mouse.Left.Up,
-        function()
-            if isDragging == 2 and type(onmoved)=='function' then
+        local function endDrag()
+            print('endDrag')
+            if dragging and dragging.active and type(onmoved)=='function' then
                 onmoved()
             end
-            isDragging = false
-        end,
-        name.."LeftUp")
+            if dragging then Task.Run(
+                function() 
+                    local count = 100
+                    while count > 0 do
+                        count = count -1
+                        Task.Yield()
+                    end
+                    self:SetEnabled(wasEnabled)
+                end) 
+            end
+            dragging = nil
+        end
 
-        self:EventAttach(Event.UI.Input.Mouse.Left.Upoutside,
-        function()
-            isDragging = false
-        end,
-        name.."LeftUpoutside")
-
-        self:EventAttach(Event.UI.Input.Mouse.Cursor.Move,
-        function(wnd,event,x, y)
-            if not isDragging then
+        local function moveDrag(wnd,event,x, y)
+            if not dragging then
                 return
             end
-            if isDragging == 2 then
-                self:SetPoint("CENTER", UIParent, "TOPLEFT", x - drag.x, y - drag.y)
+            if dragging.active then
+                self:SetPoint("CENTER", UIParent, "TOPLEFT", x, y)
             else
-                if math.abs(x-drag.x) > 8 or math.abs(y-drag.y) > 8 then
-                    isDragging = 2
+                if math.abs(x-dragging.x) > 8 or math.abs(y-dragging.y) > 8 then
+                    local width = self:GetWidth()
+                    local height = self:GetHeight()
+                    wasEnabled = self:GetEnabled()
+                    local left, top, right, bottom = self:GetBounds()
+                    if not width then width = right - left end
+                    if not height then height = bottom - top end
+                    self:SetEnabled(false)
+                    self:ClearAll()
+                    self:SetWidth(width)
+                    self:SetHeight(height)
+                    self:SetPoint("CENTER", UIParent, "TOPLEFT", x, y)
+                    dragging.active=true
                 end
             end
-        end,
-        name.."MouseMove")
+        end
+
+        self:EventAttach(Event.UI.Input.Mouse.Left.Down,startDrag,name.."LeftDown")
+        self:EventAttach(Event.UI.Input.Mouse.Left.Up,endDrag,name.."LeftUp")
+        self:EventAttach(Event.UI.Input.Mouse.Left.Upoutside,endDrag,name.."LeftUpoutside")
+        self:EventAttach(Event.UI.Input.Mouse.Cursor.Move,moveDrag,name.."MouseMove")
     end
 
     return button

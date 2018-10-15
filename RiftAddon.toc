@@ -42,7 +42,7 @@ RunOnStartup = {
     "Auctions.lua",
     "Mountaneer.lua",
     "Minion.lua",
-    "ExampleWindow.lua"
+--    "ExampleWindow.lua"
 --    "TooltipExtra.lua"
 }
 

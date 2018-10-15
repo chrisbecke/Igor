@@ -9,7 +9,7 @@ local function TaskDispatcher(handle)
         if not coroutine.resume(task) then 
             running[task] = nil
             if table.isempty(running) then
-                Command.Event.Detatch(Event.System.Update.Begin, TaskDispatcher)
+                Command.Event.Detach(Event.System.Update.Begin, TaskDispatcher)
             end
         end
     end
