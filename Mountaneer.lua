@@ -1,3 +1,10 @@
+Igor.Persist.Minion = {
+    Points = {}
+}
+
+Igor_Persist.Minion = {
+}
+
 local function ChooseRandomMount()
     local mounts = Inspect.Item.Mount.List()
 
@@ -7,7 +14,9 @@ local function ChooseRandomMount()
         table.insert(mountIds, mountId)
     end
 
-    -- choose a mount. And mount it.
+    -- choose a mount. And try mount it.
+    -- The plugin api provides no way to tell if a user is mounted so this
+    -- will dismount. Also consumes an input event.
     if #mountIds ~= 0 then
         local chosenMountId = mountIds[math.random(#mountIds)];
         Command.Item.Mount.Use(chosenMountId)
@@ -16,19 +25,21 @@ local function ChooseRandomMount()
     end
 end
 
-
-
 local context = UI.CreateContext("Console")
 local button = Igor.UI.CreateFrame("Button","Minion",context)
 
-button:EnableDrag()
+button:EnableDrag(
+    function()
+        local points = button:ReadAll()
+        fulldump(points,"points")
+        Igor_Persist.Minion.Points = points
+    end)
 button:SetPoint("CENTER",UIParent,"CENTER")
 button:EventAttach(Event.UI.Input.Mouse.Left.Click,
 function()
     ChooseRandomMount()
 end,
 "Mount".."Click")
-
 
 -- Add our command to Igor.
 Igor.Command['mount'] = ChooseRandomMount

@@ -40,11 +40,6 @@ function window:EnableDrag()
     end,
     "ExampleWindowLeftUp")
 
-    --local luo = Event.UI.Input.Mouse.Left.Upoutside
-    --local mm = Event.UI.Input.Mouse.Cursor.Move
-    --fulldump(luo,"Event.UI.Input.Mouse.Left.Upoutside")
-    --fulldump(border)
-
     border:EventAttach(Event.UI.Input.Mouse.Left.Upoutside,
     function()
         isLeftDown = false
