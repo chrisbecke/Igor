@@ -13,7 +13,6 @@ Igor.UI.Factory['Button'] = function(name,context)
         end
 
         local function endDrag()
-            print('endDrag')
             if dragging and dragging.active and type(onmoved)=='function' then
                 onmoved()
             end

@@ -28,7 +28,7 @@ local function IgorChatCommand(handle, parameter)
         print("where command is one of:")
         local commands = table.keys(Igor.Command)
         table.sort(commands)
-        print('',table.concat(commands,', '))
+        print('\t'..table.concat(commands,', '))
         return
     end
 
@@ -47,10 +47,22 @@ local function IgorChatCommand(handle, parameter)
     end
 end
 
-
+-- register a utility function that can create instances of Igor Frames
+-- Igor modules that register frames will register them in Igor.UI.Fractory
 function Igor.UI.CreateFrame(type,name,parent)
     return Igor.UI.Factory[type](name,parent)
 end
+
+
+-- Attach to the Addon.Load.End to perform some init
+--[[ Command.Event.Attach(Event.Addon.Load.End,function(handle, addonidentifier)
+    print(addonidentifier)
+    if addonidentifier == 'Igor' then
+    end
+
+end,
+"IgorAddonLoadEnd")
+]]
 
 Command.Event.Attach(Command.Slash.Register("igor"),IgorChatCommand,"Igor Slash Command")
 

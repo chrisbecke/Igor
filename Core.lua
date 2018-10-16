@@ -41,3 +41,6 @@ end
 function table.isempty(self)
     return next(self)
 end
+
+-- various things use math.random. seed it with the os time to prevent determanisitic playback
+math.randomseed( os.time() )

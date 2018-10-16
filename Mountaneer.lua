@@ -18,7 +18,9 @@ local function ChooseRandomMount()
     -- The plugin api provides no way to tell if a user is mounted so this
     -- will dismount. Also consumes an input event.
     if #mountIds ~= 0 then
-        local chosenMountId = mountIds[math.random(#mountIds)];
+        local chosen = math.random(#mountIds);
+--        print("Choosing mount "..tostring(chosen).." of "..tostring(#mountIds))
+        local chosenMountId = mountIds[chosen];
         Command.Item.Mount.Use(chosenMountId)
     else
         print("Igor cannot find any mounts!")
@@ -40,11 +42,9 @@ button:EnableDrag(
 button:SetPoint("CENTER",UIParent,"CENTER")
 button:EventAttach(Event.UI.Button.Left.Press,
 function()
-    print('press')
     ChooseRandomMount()
 end,
 "Mount".."press")
-
 
 Command.Event.Attach(Event.Addon.SavedVariables.Load.End,function()
     if Igor_Persist.Minion.Position.x and Igor_Persist.Minion.Position.y then
@@ -52,7 +52,6 @@ Command.Event.Attach(Event.Addon.SavedVariables.Load.End,function()
     end
 end,
 "MountaneerVariablesDidLoad")
-
 
 -- Add our command to Igor.
 Igor.Command['mount'] = ChooseRandomMount
