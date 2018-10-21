@@ -1,69 +1,24 @@
-local Addon, Param2 = ...
+local addon, data = ...
 
-local name = Addon.id
+-- Signals that a dimension item has been added.
+-- - addedItem - The dimension item that has been added.
+local function didAddItem(handle, addedItem)
+    print("Dimension.Layout.didAddItem")
+    fulldump(addedItem)
+end
 
-Command.Event.Attach(
-    Event.Addon.Load.Begin,
-    function( handle, addonidentifier)
-        --print("AddonLoadBegin "..tostring(handle)..","..addonidentifier)
-    end,
-    name.."AddonLoadBegin")
+-- Signals that a dimension item has been removed.
+-- - removedItem - The dimension item that has been removed.
+local function didRemoveItem(handle, removedIte)
+    print("Dimension.Layout.didRemoveItem")
+end
 
-Command.Event.Attach(
-    Event.Addon.Load.End,
-    function(handle, addonidentifier)
-        --print("AddonLoadEnd "..tostring(handle)..","..addonidentifier)
-    end,
-    name.."AddonLoadEnd")
+-- Signals that a dimension item has been updated.
+-- - updatedItem - The dimension item that has been updated.
+local function didUpdateItem(handle, updatedItem)
+    print("Dimension.Layout.didUpdateItem")
+end
 
-Command.Event.Attach(
-    Event.Addon.SavedVariables.Load.Begin,
-    function(handle, addonidentifier)
-        --print("SavedVariabledLoadBegin "..tostring(handle)..","..addonidentifier)
-    end,
-    name.."SavedVariabledLoadBegin")
-
-Command.Event.Attach(
-    Event.Addon.SavedVariables.Load.End,
-    function(handle, addonidentifier)
-        --print("SavedVariabledLoadBegin "..tostring(handle)..","..addonidentifier)
-    end,
-    name.."SavedVariablesLoadEnd")
-
-Command.Event.Attach(
-Event.Addon.SavedVariables.Save.Begin,
-function(handle, addonidentifier)
-    --print("SavedVariabledLoadBegin "..tostring(handle)..","..addonidentifier)
-end,
-name.."SavedVariablesLoadBegin")
-
-Command.Event.Attach(
-Event.Addon.SavedVariables.Save.End,
-function(handle, addonidentifier)
-    --print("SavedVariablesSaveEnd "..tostring(handle)..","..addonidentifier)
-end,
-name.."SavedVariablesSaveEnd")
-
-Command.Event.Attach(
-Event.Addon.Shutdown.Begin,
-function(handle )
-    --print("ShutdownBegin "..tostring(handle))
-end,
-name.."ShutdownBegin")
-
-Command.Event.Attach(
-Event.Addon.Shutdown.End,
-function(handle)
-    --print("ShutdownEnd "..tostring(handle))
-end,
-name.."ShutdownEnd")
-
-Command.Event.Attach(
-    Event.Addon.Startup.End,
-    function(handle)
-        --print("StartupEnd "..tostring(handle))
-
-        print(Inspect.Item.Mount.List())
-
-    end,
-    name.."StartupEnd")
+Command.Event.Attach(Event.Dimension.Layout.Add, didAddItem, "LayoutDidAddItem")
+Command.Event.Attach(Event.Dimension.Layout.Remove, didRemoveItem, "LayoutDidRemoveItem")
+Command.Event.Attach(Event.Dimension.Layout.Update, didUpdateItem, "LayoutDidUpdateItem")
