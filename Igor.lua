@@ -1,22 +1,7 @@
-Igor_Persist = {}
+local toc, Igor = ...
 
-Igor = {
-    -- UI Widgets register here 
-    UI = { Factory = {} },
-    -- Command handlers register here
-    Command = {},
-
-    Persist = Igor_Persist
-}
-
-Igor_Persist = Igor.Persist
-
-if not Igor.Persist.LoadCount then 
-    Igor.Persist.LoadCount = 1 
-else
-    Igor.Persist.LoadCount = Igor.Persist.LoadCount + 1
-end
-
+Igor.UI = { Factory = {} }
+Igor.Command = {}
 
 -- All /igor commands are of the form
 --  /igor <command> [<command parameters>]
@@ -52,17 +37,6 @@ end
 function Igor.UI.CreateFrame(type,name,parent)
     return Igor.UI.Factory[type](name,parent)
 end
-
-
--- Attach to the Addon.Load.End to perform some init
---[[ Command.Event.Attach(Event.Addon.Load.End,function(handle, addonidentifier)
-    print(addonidentifier)
-    if addonidentifier == 'Igor' then
-    end
-
-end,
-"IgorAddonLoadEnd")
-]]
 
 Command.Event.Attach(Command.Slash.Register("igor"),IgorChatCommand,"Igor Slash Command")
 

@@ -1,16 +1,69 @@
+local Addon, Param2 = ...
 
-local function OnLoaded()
-    print("BankGuild loaded?")
-end
+local name = Addon.id
 
-local function OnMove(handle,args)
-    print("Move --> handle: " .. tostring(handle) .. ", args: " .. tostring(args))
-end
+Command.Event.Attach(
+    Event.Addon.Load.Begin,
+    function( handle, addonidentifier)
+        --print("AddonLoadBegin "..tostring(handle)..","..addonidentifier)
+    end,
+    name.."AddonLoadBegin")
 
---UI.Native.BankGuild.EventAttach(Event.UI.Native.Loaded,OnLoaded,"OnBankGuildLoaded")
+Command.Event.Attach(
+    Event.Addon.Load.End,
+    function(handle, addonidentifier)
+        --print("AddonLoadEnd "..tostring(handle)..","..addonidentifier)
+    end,
+    name.."AddonLoadEnd")
 
-print('SecureMode: '.. UI.Native.BankGuild:GetSecureMode())
-print(Utility.Type(Event.UI.Layout.Move))
-print(Utility.Type(Event.UI.Native.Loaded))
+Command.Event.Attach(
+    Event.Addon.SavedVariables.Load.Begin,
+    function(handle, addonidentifier)
+        --print("SavedVariabledLoadBegin "..tostring(handle)..","..addonidentifier)
+    end,
+    name.."SavedVariabledLoadBegin")
 
-UI.Native.BankGuild:EventAttach(Event.UI.Layout.Move,OnMove,"OnBankGuildMoved")
+Command.Event.Attach(
+    Event.Addon.SavedVariables.Load.End,
+    function(handle, addonidentifier)
+        --print("SavedVariabledLoadBegin "..tostring(handle)..","..addonidentifier)
+    end,
+    name.."SavedVariablesLoadEnd")
+
+Command.Event.Attach(
+Event.Addon.SavedVariables.Save.Begin,
+function(handle, addonidentifier)
+    --print("SavedVariabledLoadBegin "..tostring(handle)..","..addonidentifier)
+end,
+name.."SavedVariablesLoadBegin")
+
+Command.Event.Attach(
+Event.Addon.SavedVariables.Save.End,
+function(handle, addonidentifier)
+    --print("SavedVariablesSaveEnd "..tostring(handle)..","..addonidentifier)
+end,
+name.."SavedVariablesSaveEnd")
+
+Command.Event.Attach(
+Event.Addon.Shutdown.Begin,
+function(handle )
+    --print("ShutdownBegin "..tostring(handle))
+end,
+name.."ShutdownBegin")
+
+Command.Event.Attach(
+Event.Addon.Shutdown.End,
+function(handle)
+    --print("ShutdownEnd "..tostring(handle))
+end,
+name.."ShutdownEnd")
+
+Command.Event.Attach(
+    Event.Addon.Startup.End,
+    function(handle)
+        --print("StartupEnd "..tostring(handle))
+
+        print(Inspect.Item.Mount.List())
+
+    end,
+    name.."StartupEnd")

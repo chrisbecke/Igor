@@ -1,3 +1,4 @@
+local toc, Igor = ...
 
 Igor.UI.Factory['Button'] = function(name,context)
 
@@ -15,16 +16,6 @@ Igor.UI.Factory['Button'] = function(name,context)
         local function endDrag()
             if dragging and dragging.active and type(onmoved)=='function' then
                 onmoved()
-            end
-            if dragging then Task.Run(
-                function() 
-                    local count = 100
-                    while count > 0 do
-                        count = count -1
-                        Task.Yield()
-                    end
-                    self:SetEnabled(wasEnabled)
-                end) 
             end
             dragging = nil
         end

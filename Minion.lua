@@ -87,15 +87,4 @@ end
 
 Command.Event.Attach(Event.Minion.Adventure.Change,OnAdventureChange,"OnAdventureChange")
 
-local function WaitForAdventure()
-    while Inspect.Minion.Slot()==nil do
-        Task.Yield()
-    end
-end
-
-Task.Run(
-    function()
-        WaitForAdventure()
-        InitAdventures()
-    end
-)
+Inspect.Minion.SlotAsync(function() InitAdventures() end)

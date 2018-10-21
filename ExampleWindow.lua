@@ -1,4 +1,7 @@
+local toc, Igor = ...
+
 local context = UI.CreateContext("TooltipExtraContext")
+
 local window = UI.CreateFrame("RiftWindow", "ExampleWindow", context)
 window:SetPoint("CENTER", UIParent, "CENTER")
 window:SetTitle("Example Window")
@@ -7,7 +10,6 @@ local border = window:GetBorder()
 local content = window:GetContent()
 local controller = window:GetController()
 --content:SetBackgroundColor(1.0,0.8,0.6,0.5)
-
 
 function window:EnableClose(onclose)
     local button = UI.CreateFrame('RiftButton','Close',window)

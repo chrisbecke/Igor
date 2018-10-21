@@ -1,3 +1,5 @@
+local toc, Igor = ...
+
 local function dump_md()
     local doc_names_map = Inspect.Documentation()
 

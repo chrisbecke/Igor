@@ -39,7 +39,7 @@ function fulldump(obj,prefix)
         if type(value) == 'table' then
             return '{} -- '..Utility.Type(value)
         elseif type(value) == 'string' then 
-            return "'"..value.."''"
+            return "'"..value.."'"
         end
         return tostring(value)
     end
@@ -56,12 +56,12 @@ function fulldump(obj,prefix)
         end
     end
 
-    if not prefix then prefix = '' else prefix = prefix..'.' end
+    if not prefix then
+        prefix=''
+    end
+    print(prefix..' = '..dstring(obj))
 
     if type(obj) == 'table' then
-        print('Walking all data for '..dstring(obj))
-        dumpTableRecursive(obj,prefix)
-    else
-        print(prefix..' = '..dstring(obj))
+        dumpTableRecursive(obj,prefix..'.')
     end
 end

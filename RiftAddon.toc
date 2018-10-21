@@ -31,12 +31,19 @@ RunOnStartup = {
     "Core.lua",
 
     "Igor.lua",
-    "Button.lua",
+    "SettingsManager.lua",
+    "UI/Window.lua",
+    "UI/Button.lua",
+    "UI/ActionIcon.lua",
+    "UI/Docker.lua",
     "Task.lua",
+    "AsyncInspectors.lua",
+    
     "Dump.lua",
     "dumpall_md.lua",
+    "IgorPanel.lua",
 
---    "Test.lua",
+    "Test.lua",
 --    "TextureDump.lua",
 
     "Auctions.lua",
@@ -47,6 +54,5 @@ RunOnStartup = {
 }
 
 SavedVariables = {
---    Igor_Textures = "global"
     Igor_Persist = "global" 
 }

@@ -1,4 +1,4 @@
-
+local toc,Igor = ...
 
 local function printAllDocuments(pattern)
     local documentables = Inspect.Documentation()
