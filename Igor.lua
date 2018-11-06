@@ -1,7 +1,6 @@
-local toc, Igor = ...
+local addon, lib = ...
 
-Igor.UI = { Factory = {} }
-Igor.Command = {}
+local commandRegistry = {}
 
 -- All /igor commands are of the form
 --  /igor <command> [<command parameters>]
@@ -9,9 +8,9 @@ local function IgorChatCommand(handle, parameter)
 
     -- redirect any empty commands to help
     if string.isempty(parameter) or parameter == '-help' then
-        print("Usage: /igor <command>")
+        print("Usage: /"..addon.id.." <command>")
         print("where command is one of:")
-        local commands = table.keys(Igor.Command)
+        local commands = table.keys(commandRegistry)
         table.sort(commands)
         print('\t'..table.concat(commands,', '))
         return
@@ -22,7 +21,7 @@ local function IgorChatCommand(handle, parameter)
     if not command then command = parameter end
 
     -- Igor modules should register their igor commands here as functions
-    handler = Igor.Command[command]
+    handler = commandRegistry[command]
 
     -- execute the handler
     if handler then
@@ -32,12 +31,8 @@ local function IgorChatCommand(handle, parameter)
     end
 end
 
--- register a utility function that can create instances of Igor Frames
--- Igor modules that register frames will register them in Igor.UI.Fractory
-function Igor.UI.CreateFrame(type,name,parent)
-    return Igor.UI.Factory[type](name,parent)
-end
+Command.Event.Attach(Command.Slash.Register(addon.id),IgorChatCommand,"Igor Slash Command")
 
-Command.Event.Attach(Command.Slash.Register("igor"),IgorChatCommand,"Igor Slash Command")
+lib.Command = commandRegistry
 
-print("Igor is ready to serve. /igor for help");
+print("Igor is ready to serve. /"..addon.id.." for help");

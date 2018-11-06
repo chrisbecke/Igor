@@ -1,4 +1,7 @@
-local toc, Igor = ...
+local toc, lib = ...
+
+local UI = lib.UI
+local Inspect = lib.Inspect
 
 local settings = {}
 
@@ -45,34 +48,39 @@ local function ChooseRandomMount()
     end
 end
 
-local context = UI.CreateContext("Console")
-local button = Igor.UI.CreateFrame("Button","Minion",context)
-
-button:EnableDrag(
-    function()
-        local left, top, right, bottom = button:GetBounds()
-        settings.Position = {
-            x = (right+left)/2,
-            y = (bottom+top)/2
-        }
-    end)
-button:SetPoint("CENTER",UIParent,"CENTER")
-button:EventAttach(Event.UI.Button.Left.Press,
-function()
-    ChooseRandomMount()
-end,
-"Mount".."press")
-
-local obutton = button
-
 local function createMountaneer() 
-    -- docker windows provide an expanding child storage near the edge of the screen
-    local docker = Igor.UI.CreateFrame("Docker","Docker",context)
-    docker:SetPoint(0.5,nil,UIParent,0,nil,settings.Position.x,nil)
-
-    local button = Igor.UI.CreateFrame("ActionIcon","Icon1",docker)
     local mountList = Inspect.Item.Mount.List()
     local mount = next(mountList)
+    -- give up if the player has no mounts
+    if not mount then return end
+
+    local context = UI.CreateContext("Console")
+    local button = UI.CreateFrame("Button","Minion",context)
+
+    button:EnableDrag(
+        function()
+            local left, top, right, bottom = button:GetBounds()
+            settings.Position = {
+                x = (right+left)/2,
+                y = (bottom+top)/2
+            }
+        end)
+    button:SetPoint("CENTER",UIParent,"CENTER")
+    button:EventAttach(Event.UI.Button.Left.Press,
+    function()
+        ChooseRandomMount()
+    end,
+    "Mount".."press")
+
+    local obutton = button
+
+
+
+    -- docker windows provide an expanding child storage near the edge of the screen
+    local docker = UI.CreateFrame("Docker","Docker",context)
+    docker:SetPoint(0.5,nil,UIParent,0,nil,settings.Position.x,nil)
+
+    local button = UI.CreateFrame("ActionIcon","Icon1",docker)
     local mountDetails = Inspect.Item.Detail(mount)
 
     button:SetTexture("Rift",mountDetails.icon)
@@ -88,8 +96,8 @@ end
 
 -- Wait for AddonStartupEnd before creating Mountaneer interface to ensure all savedvariables
 -- are restored.
-Command.Event.Attach(Event.Addon.Startup.End,function()
-    settings = Igor.Settings.Mountaneer or {
+Inspect.WhenPlayerAvailabilityFull(function()
+    settings = lib.Settings.Mountaneer or {
         Position = { x=0, y = 0},
     }
     if not settings.Filter then
@@ -101,9 +109,8 @@ Command.Event.Attach(Event.Addon.Startup.End,function()
         settings.Position.y = Igor_Persist.Minion.Position.y
     end
 
-    Inspect.Item.Mount.ListAsync().Then( createMountaneer )
-end,
-"MountaneerStartupEnd")
+    createMountaneer()
+end)
 
 -- Add our command to Igor.
-Igor.Command['mount'] = ChooseRandomMount
+lib.Command['mount'] = ChooseRandomMount

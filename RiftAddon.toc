@@ -1,4 +1,4 @@
-Identifier = "Igor"
+Identifier = "igor"
 
 NameShort = "Igor" 
 
@@ -30,20 +30,27 @@ RunOnStartup = {
     "debug.lua",
     "Core.lua",
 
+    "Extensions/Inspect.lua",
+    "Extensions/UI.lua",
+
     "Igor.lua",
+
     "SettingsManager.lua",
+    "UI/EnableDrag.lua",
     "UI/Window.lua",
     "UI/Button.lua",
     "UI/ActionIcon.lua",
     "UI/Docker.lua",
+    "UI/SmallWindow.lua",
     "Task.lua",
-    "AsyncInspectors.lua",
     
     "Dump.lua",
     "dumpall_md.lua",
     "IgorPanel.lua",
 
-    "Test.lua",
+--    "Watch/Unit.lua",
+--    "Watch/Minion.lua",
+--    "Test.lua",
 --    "TextureDump.lua",
 
     "Auctions.lua",

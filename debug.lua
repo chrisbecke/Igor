@@ -11,6 +11,13 @@ function dstring(value)
     return tostring(value)
 end
 
+local function kstring(key)
+    if type(key) == 'string' then return key
+    elseif type(key) == 'table' then return '['..tostring(key)..']' 
+    else
+        return '['..type(key)..':'..tostring(key)..']'
+    end
+end
 
 function dtable(tab,prefix)
     for key,value in pairs(tab) do
@@ -46,8 +53,8 @@ function fulldump(obj,prefix)
 
     local function dumpTableRecursive(obj,prefix)
         for key,value in pairs(obj) do
-            print(prefix..key..'='..dstring(value))
-            if type(value) == 'table' then dumpTableRecursive(value,prefix..key..'.') end
+            print(prefix..kstring(key)..'='..dstring(value))
+            if type(value) == 'table' then dumpTableRecursive(value,prefix..kstring(key)..'.') end
         end
         local meta = getmetatable(obj)
         if meta then

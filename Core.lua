@@ -1,10 +1,12 @@
+local addon, lib = ...
+
 -- is null or empty test
 function string.isempty(s)
     return s == nil or s == "";
 end
 
 -- for val in values(array) do
-function values(t)
+function lib.values(t)
     local i = 0
     return function() i = i + 1; return t[i] end
 end
@@ -44,3 +46,22 @@ end
 
 -- various things use math.random. seed it with the os time to prevent determanisitic playback
 math.randomseed( os.time() )
+
+
+-- local foo = ['a','b']
+-- if cond then foo = 'z' end
+-- for i,j in ids(foo) do 
+--   print(j)
+function lib.ids(stringOrTable)
+    if type(stringOrTable) == 'table' then
+        return pairs(stringOrTable)
+    end
+    local i = 0
+    return function()
+        if i == 0 then
+            i = i + 1
+            return stringOrTable
+        end
+        return nil
+    end
+end

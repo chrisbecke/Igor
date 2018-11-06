@@ -1,5 +1,16 @@
 local addon, Igor = ...
 
+-- This module publishes two values
+-- Igor_Persist is created by virtual of the value existin in the .toc file
+--
+-- Here we map it into the private space as "Settings" where other modules
+-- can store their values.
+--
+-- No extra work is required to persist settings as Rift will see
+-- that Igor_Persist = lib.Settings = { whatever }
+-- and be able to save it.
+
+
 local name = addon.id
 
 Command.Event.Attach(

@@ -7,7 +7,7 @@ local function createWindow(name,context)
 
     local l,t,r,b = content:GetBounds()
 
---    print(string.format('Bounts: %d %d %d %d',l,t,r,b))
+    -- print(string.format('Bounts: %d %d %d %d',l,t,r,b))
 
     local border = UI.CreateFrame("Texture","IconBorder",content)
     border:SetPoint("CENTER",content,"CENTER")
@@ -17,7 +17,7 @@ local function createWindow(name,context)
 
     l,t,r,b = border:GetBounds()
 
-    print(string.format('Bounts: %d %d %d %d',l,t,r,b))
+    -- print(string.format('Bounts: %d %d %d %d',l,t,r,b))
 
     return content
 end
