@@ -2,72 +2,28 @@ local addon, lib = ...
 local Inspect = lib.Inspect
 local UI = lib.UI
 
-
 local available = {}
 local finished = {}
 local working = {}
 
-local minion = {}
-
-function minion.available(adventure)
---    print('Available: '..adventure.name)
---    fulldump(adventure,'adventure')
-
-    available[adventure.id] = adventure
-    print('Adventure: '..adventure.name..' is now available.')
+local function unexpected(adventure)
+    local from = 'undefined'
+    if available[adventure.id] then from = 'available' end
+    if working[adventure.id] then from = 'working' end
+    if finished[adventure.id] then from = 'finished' end
+    local to = adventure.mode
+    if not to then to = 'undefined' end
+    print('Unexpected "'..adventure.name..'" mode from '..from..' to '..to)
 end
-
-function minion.finished(adventure)
---    print('Finished: '..adventure.name)
-    --fulldump(adventure,'adventure')
-    working[adventure.id] = nil
-    finished[adventure.id] = adventure
-    local minion = Inspect.Minion.Minion.Detail(adventure.minion)
-    print('Minion '..minion.name..'has finished: '..adventure.name )
-end
-
-function minion.working(adventure)
---    print('Working: '..adventure.name)
-    --fulldump(adventure,'adventure')
-    available[adventure.id] = nil
-    working[adventure.id] = adventure
-    local minion = Inspect.Minion.Minion.Detail(adventure.minion)
-    print('Minion '..minion.name..' is working on: '..adventure.name )
-end
-
-function minion.remove(adventure)
---    print('Remove: '..adventure.name)
-    --fulldump(adventure,'adventure')
-
-    if finished[adventure.id] then
-        finished[adventure.id] = nil
-        print('Adventure: '..adventure.name..' claimed.')
-    elseif working[adventure.id] then
-        working[adventure.id] = nil
-        print('Adventure: '..adventure.name..' claimed. (was reset to working!?)')
-    else
-        print('Adventure: '..adventure.name..' being removed!? (without being finished!?)')
-    end
-end
-
-
 
 local context = UI.CreateContext('MinionContext')
 local smallWindow = UI.CreateFrame("SmallWindow","SmallWindow",context)
 smallWindow:EnableDrag()
 local closeButton = UI.CreateFrame("RiftButton","CloseButton",smallWindow)
-closeButton:SetText('Close')
+closeButton:SetText('Scan')
 local content = smallWindow:GetContent()
 closeButton:SetPoint(0.5,1,content,0.5,1,0,-4)
 closeButton:SetLayer(100)
-
-local listAdventuresButton = UI.CreateFrame("RiftButton","ListAdventures",smallWindow)
-listAdventuresButton:SetText('Adventures')
-listAdventuresButton:SetPoint("CENTERLEFT",smallWindow,"CENTERRIGHT",0,0)
-
-local listMinionsButton = UI.CreateFrame("RiftButton","ListMinions",smallWindow)
-listMinionsButton:SetText('Minions')
-listMinionsButton:SetPoint("CENTERTOP",listAdventuresButton,"CENTERBOTTOM",0,0)
 
 local layout = {}
 
@@ -76,10 +32,8 @@ local nextAction = nil
 layout.minionName = UI.CreateFrame("Text","MinionName",content)
 
 
-
 local function closeMinionWindow(frame,handle)
     if nextAction then nextAction() end
-    -- smallWindow:SetVisible(false)
 end
 
 local function showFinished()
@@ -87,7 +41,7 @@ local function showFinished()
     if not adventure then return false end
 
     nextAction = function()
-        print('Claiming... '..adventure.name)
+        print('Claiming '..adventure.name)
         Command.Minion.Claim(adventure.id)
     end
 
@@ -98,12 +52,12 @@ end
 local function showAvailable()
     local slots = Inspect.Minion.Slot()
     for id,test in pairs(working) do
-        print('Counting a working... '..test.name)
+        -- print('Counting a working... '..test.name)
         slots = slots -1
     end
 
     if slots <= 0 then 
-        print('Giving up. '..tostring(slots)..'/'..tostring(Inspect.Minion.Slot())..' slots')
+--        print('Giving up. '..tostring(slots)..'/'..tostring(Inspect.Minion.Slot())..' slots')
         return false
     end
 
@@ -119,7 +73,7 @@ local function showAvailable()
 
     if not adventure then
         print('Giving up. No 5/15 minute adventures are available!?')
-        fulldump(available, 'available')
+        --fulldump(available, 'available')
         return false
     end
 
@@ -168,19 +122,57 @@ local function updateMinionUI()
     smallWindow:SetVisible(haveUI)
 end
 
-
-
 local function checkAdventure(adventure)
-    if minion[adventure.mode] then
-        minion[adventure.mode](adventure)
-    elseif adventure.mode == nil then
-        minion.remove(adventure)
+    local mode = adventure.mode
+    local id = adventure.id
+
+    if available[id] then
+        if mode == 'working' then
+            working[id] = adventure
+        else
+            unexpected(adventure)
+        end
+        available[id] = nil
+    elseif working[id] then
+        if mode == 'finished' then
+            finished[id] = adventure
+        else
+            unexpected(adventure)
+        end
+        working[id] = nil
+    elseif finished[id] then
+        if mode then
+            unexpected(adventure)
+        end
+        finished[id] = nil
     else
-        print('Strange mode'..adventure.mode..' for '..adventure.name)
+        if mode == 'working' then
+            working[id] = adventure
+        elseif mode == 'available' then
+            available[id] = adventure
+        elseif mode == 'finished' then
+            finished[id] = adventure
+        else
+            unexpected(adventure)
+        end
     end
 end
 
-local function deleteAdventure(key)
+local function deleteAdventure(id)
+    if available[id] then
+        print('Unexpected. Deleting available adventure! '..available[id].name)
+        available[id]=nil
+    end
+    
+    if working[id] then
+        print('Unexpected. Deleting working adventure! '..working[id].name)
+        working[id] = nil
+    end
+
+    if finished[id] then
+        print('Unexpected. Deleting finished adventure! '..finished[id].name)
+        finished[id] = nil
+    end
 end
 
 local function adventureDidChange(handle,adventures)
@@ -200,13 +192,6 @@ local function listAdventures(frame,handle)
     print('Slots:'..tostring(slot))
     local adventures = Inspect.Minion.Adventure.List()
     adventureDidChange(handle,adventures)
---[[
---    fulldump(adventures)
---    for key in pairs(adventures) do
---        local adventure = Inspect.Minion.Adventure.Detail(key)
---        fulldump(adventure)
---    end
-]]
 end
 
 local function listMinions(frame,handle)
@@ -218,8 +203,25 @@ local function listMinions(frame,handle)
     end
 end
 
+nextAction = function()
+    local adventures = Inspect.Minion.Adventure.List()
+    adventureDidChange(handle,adventures)    
+end
 
-listMinionsButton:EventAttach(Event.UI.Button.Left.Press,listMinions,"MinionsList")
-listAdventuresButton:EventAttach(Event.UI.Button.Left.Press,listAdventures,"AdventureList")
+-- Attach event listeners to the UI
 closeButton:EventAttach(Event.UI.Button.Left.Press,closeMinionWindow,"MinionClose")
+-- Attach an Adventure Change listener. This drives our GUI
 Command.Event.Attach(Event.Minion.Adventure.Change,adventureDidChange,"OnAdventureChange")
+
+
+--[[
+local listAdventuresButton = UI.CreateFrame("RiftButton","ListAdventures",smallWindow)
+listAdventuresButton:SetText('Adventures')
+listAdventuresButton:SetPoint("CENTERLEFT",smallWindow,"CENTERRIGHT",0,0)
+listAdventuresButton:EventAttach(Event.UI.Button.Left.Press,listAdventures,"AdventureList")
+
+local listMinionsButton = UI.CreateFrame("RiftButton","ListMinions",smallWindow)
+listMinionsButton:SetText('Minions')
+listMinionsButton:SetPoint("CENTERTOP",listAdventuresButton,"CENTERBOTTOM",0,0)
+listMinionsButton:EventAttach(Event.UI.Button.Left.Press,listMinions,"MinionsList")
+]]
