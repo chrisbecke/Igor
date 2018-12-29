@@ -80,3 +80,34 @@ function lib.table.count(t)
     end
     return count
 end
+
+-- builds a new table containing all the elements that pass a test
+function lib.table.filter(tab,cb)
+    local result = {}
+    for key,value in pairs(tab) do
+        if cb(key,value) then
+            result[key] = value
+        end
+    end
+    return result
+end
+
+-- builds a new table array containing all the elements that pass a test
+-- treats the table as an array.
+function lib.table.ifilter(tab,cb)
+    local result = {}
+    for i,value in ipairs(tab) do
+        if cb(i,value) then
+            result[#result+1] = value
+        end
+    end
+    return result
+end
+
+function lib.table.values(tab)
+    local values = {}
+    for key,value in pairs(tab) do
+        values[#values+1]=value
+    end
+    return values
+end
