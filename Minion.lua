@@ -79,6 +79,7 @@ local function updateAdventureUI()
             print('Claiming '..adventure.name)
             Command.Minion.Claim(adventure.id)
         end
+        print('Found finished adventure: '..adventure.name)
         closeButton:SetText('Claim')
         smallWindow:SetVisible(true)
         return
@@ -114,6 +115,7 @@ local function updateAdventureUI()
                 print('Sending '..minion.name..' on '..adventure.name)
                 Command.Minion.Send(minion.id,adventure.id,"none")
             end
+            print('Found available adventure '..adventure.name)
             closeButton:SetText('Send')
             smallWindow:SetVisible(true)
             return
