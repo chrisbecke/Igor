@@ -5,16 +5,11 @@ NameShort = "Igor"
 Name = "Igor"
  
 Description = { 
-    English = [[Igor is ready to serve.
-Ask Igor anything using the following command:
+    English = [[Igor is ready.
 
-    /igor
-
-## Commands:
-igor -help - shows help text
-igor mount - igor chooses a random mount for you
-igor dump - igor dumps items from the lua globals space
-igor doc - igor shows RIFT Addon API documentation for items
+Features that mostly work:
+  * Mounts
+  * Minions
 ]]
 }
  
@@ -50,6 +45,7 @@ RunOnStartup = {
 
 --    "Watch/Unit.lua",
 --    "Watch/Minion.lua",
+--    "Watch/Addon.lua",
 --    "Test.lua",
 --    "TextureDump.lua",
 

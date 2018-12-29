@@ -1,4 +1,4 @@
-local addon, Igor = ...
+local addon, lib = ...
 
 -- This module publishes two values
 -- Igor_Persist is created by virtual of the value existin in the .toc file
@@ -10,17 +10,23 @@ local addon, Igor = ...
 -- that Igor_Persist = lib.Settings = { whatever }
 -- and be able to save it.
 
-
-local name = addon.id
+lib.Settings = {}
 
 Command.Event.Attach(
     Event.Addon.SavedVariables.Load.End,
     function(handle, addonidentifier)
         if addonidentifier == addon.identifier then
-            Igor.Settings = Igor_Persist
+            -- ensure any defaults are copied over.
+            for key,value in pairs(lib.Settings) do
+                if Igor_Persist[key] == nil then
+                    Igor_Persist[key] = value
+                end
+            end
+            -- now associate lib.Settings with the persistent anchor
+            lib.Settings = Igor_Persist
         end
     end,
-    name.."SavedVariablesLoadEnd")
+    addon.id.."SavedVariablesLoadEnd")
 
 Command.Event.Attach(
     Event.Addon.SavedVariables.Save.Begin,
@@ -29,10 +35,10 @@ Command.Event.Attach(
             print(addon.name.." did start saving variables")
         end
     end,
-    name.."SavedVariablesSaveBegin")
+    addon.id.."SavedVariablesSaveBegin")
 
 Command.Event.Attach(
     Event.Addon.Startup.End,
     function(handle)
     end,
-    name.."StartupEnd")
+    addon.id.."StartupEnd")

@@ -74,8 +74,6 @@ local function createMountaneer()
 
     local obutton = button
 
-
-
     -- docker windows provide an expanding child storage near the edge of the screen
     local docker = UI.CreateFrame("Docker","Docker",context)
     docker:SetPoint(0.5,nil,UIParent,0,nil,settings.Position.x,nil)

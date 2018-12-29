@@ -1,5 +1,5 @@
+local addon, lib=...
 -- bad global scope utility functions that are useful for debugging.
-
 
 -- renders a value as a string doing some intelligent expanding.
 function dstring(value)
@@ -70,5 +70,21 @@ function fulldump(obj,prefix)
 
     if type(obj) == 'table' then
         dumpTableRecursive(obj,prefix..'.')
+    end
+end
+
+local function summarize_table(value)
+    return '...'
+end
+
+local function summarize_string(value)
+    return string.match(value,"^[%g ]*")
+end
+
+lib.summary=function(value)
+    if type(value) == 'table' then return '{'..summarize_table(value)..'}'
+    elseif type(value) == 'string' then return '"'..summarize_string(value)..'"'
+    elseif type(value) == 'boolean' then return tostring(value)
+    else return type(value)
     end
 end

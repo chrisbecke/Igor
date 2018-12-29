@@ -65,3 +65,18 @@ function lib.ids(stringOrTable)
         return nil
     end
 end
+
+
+local table_meta = { __index = table }
+
+lib.table = {}
+
+setmetatable(lib.table,table_meta)
+
+function lib.table.count(t)
+    local count = 0
+    for k,v in pairs(t) do
+        count = count +1
+    end
+    return count
+end
