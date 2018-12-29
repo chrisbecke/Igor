@@ -5,11 +5,14 @@ local function createFrame(name,context)
 
     local bg = UI.CreateFrame("Texture",name.."Bg",frame) -- 256x256
     bg:SetTexture("Rift","window_small_bg_(yellow).png.dds")
+    bg:SetLayer(100)
     
     local border = UI.CreateFrame("Texture",name.."Border",frame)
     border:SetTexture("Rift","window_small_frame.png.dds") -- 256x256
+    border:SetLayer(200)
 
     local content = UI.CreateFrame("Frame",name.."Content",frame)
+    content:SetLayer(500)
     --content:SetBackgroundColor(1,1,1,0.5)
 
     function frame:GetBorder()

@@ -104,11 +104,11 @@ updateAdventureUI = function()
     local id,adventure = next(list)
     if id ~= nil then
         nextAction = function()
-            print('Claiming '..adventure.name)
+            -- print('Claiming '..adventure.name)
             Command.Minion.Claim(adventure.id)
         end
         local minion = Inspect.Minion.Minion.Detail(adventure.minion)
-        print('Found finished adventure: '..adventure.name)
+        -- print('Found finished adventure: '..adventure.name)
         layout.adventure:SetText(adventure.name)
         layout.minion:SetText(minion.name)
         closeButton:SetText('Claim')
@@ -121,7 +121,7 @@ updateAdventureUI = function()
     local list = table.filter(adventures,function (id,adventure) return adventure.mode=='working' end)
     local working = table.count(list)
     if working == slots then
-        print('Returning. '..tostring(working).."/"..tostring(slots).." minions all working.")
+        -- print('Returning. '..tostring(working).."/"..tostring(slots).." minions all working.")
         smallWindow:SetVisible(false)
         return
     end
@@ -193,12 +193,12 @@ updateAdventureUI = function()
     local minion = minions[1]
 
     nextAction = function()
-        print('Sending '..minion.name..'('..tostring(minion.level)..') on '..adventure.name)
+        -- print('Sending '..minion.name..'('..tostring(minion.level)..') on '..adventure.name)
         Command.Minion.Send(minion.id,adventure.id,"none")
     end
-    print('Found '..adventure.name..' for '..minion.name..'('..tostring(minion.level)..')')
+    -- print('Found '..adventure.name..' for '..minion.name..'('..tostring(minion.level)..')')
     layout.adventure:SetText(adventure.name)
-    layout.minion:SetText(minion.name)
+    layout.minion:SetText(minion.name..' ('..tostring(minion.level)..')')
     closeButton:SetText('Send')
     smallWindow:SetVisible(true)
 end
